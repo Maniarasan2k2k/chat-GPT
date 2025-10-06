@@ -15,8 +15,19 @@ await connectDB()
 // Stripe Webhooks
 app.post('/api/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
 
+
+
+const frotEnd = process.env.FRONT_END_URL
 // Middleware
-app.use(cors())
+app.use(cors({
+    origin: [
+
+        frotEnd, // local frontend // Vercel deployed frontend
+],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // allow all methods
+    credentials: true
+}))
+
 app.use(express.json())
 
 // Routes
@@ -26,7 +37,7 @@ app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`)
